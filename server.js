@@ -17,7 +17,15 @@ const gameState = {
         y: 0
     }]
 }
+function distributeState() {
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(gameState));
+        }
+    });
+}
 wss.on('connection', function connection(ws) {
+    distributeState();
     ws.on('error', console.error);
 
     ws.on('message', function message(data) {
@@ -37,8 +45,7 @@ wss.on('connection', function connection(ws) {
             player.x += 1;
         }
         console.log(JSON.stringify(gameState))
-        ws.send(JSON.stringify(gameState));
-    });
+        distributeState();
 
-    //ws.send('something');
+    });
 });
