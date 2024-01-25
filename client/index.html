@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <title>shooter
+
+    </title>
+</head>
+
+<body>
+    shooter
+    <script>
+        // Create WebSocket connection.
+        const socket = new WebSocket("ws://localhost:9206");
+
+        // Connection opened
+        socket.addEventListener("open", (event) => {
+            socket.send("Hello Server!");
+        });
+
+        // Listen for messages
+        socket.addEventListener("message", (event) => {
+            console.log("Message from server ", event.data);
+        });  
+    </script>
+</body>
+
+</html>
