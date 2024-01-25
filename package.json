@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "shooter",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon -e js,html ./server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
