@@ -13,6 +13,13 @@
         .currentPlayer {
             background-color: blue;
         }
+
+        .bullet {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: black;
+        }
     </style>
 </head>
 
@@ -79,6 +86,9 @@
             }
             if (ev.key == "ArrowRight" || ev.key == "d") {
                 sendAction("right");
+            }
+            if (ev.code == "Space") {
+                sendAction("shoot");
             }
 
         }

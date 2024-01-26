@@ -16,12 +16,16 @@ const gameState = {
 }
 const playerSpeed = 5;
 let playerCounter = 1;
-function distributeState() {
+function distributeMessage(message) {
+    const messageString = JSON.stringify(message);
     wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(gameState));
+            client.send(messageString);
         }
     });
+}
+function distributeState() {
+    distributeMessage(gameState);
 }
 wss.on('connection', function connection(ws) {
     const playerId = `player${playerCounter}`;
@@ -32,7 +36,8 @@ wss.on('connection', function connection(ws) {
     const player = {
         id: playerId,
         x: 0,
-        y: 0
+        y: 0,
+        aimDirection: "right"
     };
     playerCounter += 1;
     gameState.players.push(player);
@@ -45,16 +50,29 @@ wss.on('connection', function connection(ws) {
         const command = JSON.parse(data);
         if (command.action == "down") {
             player.y += playerSpeed;
+            player.aimDirection = command.action;
         }
         if (command.action == "up") {
             player.y -= playerSpeed;
+            player.aimDirection = command.action;
         }
         if (command.action == "left") {
             player.x -= playerSpeed;
-            ;
+            player.aimDirection = command.action;
         }
         if (command.action == "right") {
             player.x += playerSpeed;
+            player.aimDirection = command.action;
+        }
+        if (command.action == "shoot") {
+            distributeMessage({
+                type: "bullet",
+                x: player.x,
+                y: player.y,
+                flightDirection: player.aimDirection,
+                shooterId: playerId,
+                flightDistance: 100
+            })
         }
         console.log(JSON.stringify(gameState))
         distributeState();
