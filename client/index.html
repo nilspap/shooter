@@ -3,7 +3,7 @@
 <head>
     <title>shooter</title>
     <style>
-        #player1 {
+        .player {
             position: absolute;
             width: 10px;
             height: 10px;
@@ -14,7 +14,7 @@
 
 
 <body>
-    <div id="player1" />
+    <div id="player1" class="player" />
     <script>
         // Create WebSocket connection.
         var wsUrl = new URL('', window.location.href);
