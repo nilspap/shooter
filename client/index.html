@@ -7,6 +7,10 @@
             position: absolute;
             width: 10px;
             height: 10px;
+            background-color: brown;
+        }
+
+        .currentPlayer {
             background-color: blue;
         }
     </style>
@@ -23,21 +27,37 @@
         wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
         wsUrl.port = 9206;
         const socket = new WebSocket(wsUrl.href);
-
-        // Listen for messages
-        socket.addEventListener("message", (event) => {
-            console.log("Message from server ", event.data);
-            const gameState = JSON.parse(event.data);
+        let playerId;
+        function updateGameState(gameState) {
             for (const player of gameState.players) {
                 let playerDiv = document.getElementById(player.id);
                 if (!playerDiv) {
                     playerDiv = document.createElement("div");
                     playerDiv.id = player.id;
                     playerDiv.classList.add("player");
+                    if (player.id == playerId) {
+                        playerDiv.classList.add("currentPlayer");
+                    }
                     document.body.append(playerDiv);
                 }
                 playerDiv.style.left = `${player.x}px`;
                 playerDiv.style.top = `${player.y}px`;
+            }
+        }
+
+        // Listen for messages
+        socket.addEventListener("message", (event) => {
+            console.log("Message from server ", event.data);
+            const message = JSON.parse(event.data);
+            switch (message.type) {
+                case "gameState":
+                    updateGameState(message);
+                    break;
+                case "currentPlayerId":
+                    playerId = message.playerId;
+                    break;
+                default:
+                    break;
             }
         });
 

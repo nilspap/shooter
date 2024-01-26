@@ -11,6 +11,7 @@ server.listen(8080, function () {
     console.log('Listening on http://localhost:8080');
 });
 const gameState = {
+    type: "gameState",
     players: []
 }
 const playerSpeed = 5;
@@ -23,8 +24,13 @@ function distributeState() {
     });
 }
 wss.on('connection', function connection(ws) {
+    const playerId = `player${playerCounter}`;
+    ws.send(JSON.stringify({
+        type: "currentPlayerId",
+        playerId: playerId
+    }));
     const player = {
-        id: `player${playerCounter}`,
+        id: playerId,
         x: 0,
         y: 0
     };
