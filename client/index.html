@@ -168,17 +168,32 @@
             socket.send(JSON.stringify(action));
 
         }
+        let pressedDirectionKeys = {};
         document.onkeydown = function (ev) {
             if (ev.key == "ArrowDown" || ev.key == "s") {
-                sendMoveAction("down");
+                pressedDirectionKeys["down"] = true;
+            } else if (ev.key == "ArrowUp" || ev.key == "w") {
+                pressedDirectionKeys["up"] = true;
+            } else if (ev.key == "ArrowLeft" || ev.key == "a") {
+                pressedDirectionKeys["left"] = true;
+            } else if (ev.key == "ArrowRight" || ev.key == "d") {
+                pressedDirectionKeys["right"] = true;
             }
-            if (ev.key == "ArrowUp" || ev.key == "w") {
+            if (pressedDirectionKeys["down"] && pressedDirectionKeys["right"]) {
+                sendMoveAction("down-right");
+            } else if (pressedDirectionKeys["down"] && pressedDirectionKeys["left"]) {
+                sendMoveAction("down-left");
+            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["right"]) {
+                sendMoveAction("up-right");
+            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["left"]) {
+                sendMoveAction("up-left");
+            } else if (pressedDirectionKeys["up"]) {
                 sendMoveAction("up");
-            }
-            if (ev.key == "ArrowLeft" || ev.key == "a") {
+            } else if (pressedDirectionKeys["down"]) {
+                sendMoveAction("down");
+            } else if (pressedDirectionKeys["left"]) {
                 sendMoveAction("left");
-            }
-            if (ev.key == "ArrowRight" || ev.key == "d") {
+            } else if (pressedDirectionKeys["right"]) {
                 sendMoveAction("right");
             }
             if (ev.code == "Space") {
@@ -186,7 +201,20 @@
                     action: "shoot"
                 });
             }
-
+        }
+        document.onkeyup = function (ev) {
+            if (ev.key == "ArrowDown" || ev.key == "s") {
+                pressedDirectionKeys["down"] = false;
+            }
+            if (ev.key == "ArrowUp" || ev.key == "w") {
+                pressedDirectionKeys["up"] = false;
+            }
+            if (ev.key == "ArrowLeft" || ev.key == "a") {
+                pressedDirectionKeys["left"] = false;
+            }
+            if (ev.key == "ArrowRight" || ev.key == "d") {
+                pressedDirectionKeys["right"] = false;
+            }
         }
     </script>
 </body>

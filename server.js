@@ -68,21 +68,25 @@ wss.on('connection', function connection(ws) {
         });
     }
     function movePlayer(moveDirection) {
-        if (moveDirection == "down") {
-            currentPlayer.y += playerSpeed;
-
-        }
-        if (moveDirection == "up") {
-            currentPlayer.y -= playerSpeed;
-
-        }
-        if (moveDirection == "left") {
-            currentPlayer.x -= playerSpeed;
-
-        }
-        if (moveDirection == "right") {
-            currentPlayer.x += playerSpeed;
-
+        switch (moveDirection) {
+            case "down":
+                currentPlayer.y += playerSpeed;
+                break;
+            case "up":
+                currentPlayer.y -= playerSpeed;
+                break;
+            case "left":
+                currentPlayer.x -= playerSpeed;
+                break;
+            case "right":
+                currentPlayer.x += playerSpeed;
+                break;
+            case "down-right":
+                currentPlayer.y += playerSpeed;
+                currentPlayer.x += playerSpeed;
+                break;
+            default:
+                break;
         }
         currentPlayer.aimDirection = moveDirection;
         distributeState();
