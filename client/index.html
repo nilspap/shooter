@@ -20,13 +20,40 @@
             height: 2px;
             background-color: black;
         }
+
+        #score {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #514444;
+        }
+
+        #scoreTable {
+            width: 300px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: small;
+            color: orange;
+            text-align: center;
+            border: 1px solid black;
+        }
     </style>
 </head>
 
 
 <body>
 
-
+    <div id="score">
+        <table id="scoreTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 
     <script>
         // Create WebSocket connection.
@@ -36,7 +63,22 @@
         wsUrl.port = 9206;
         const socket = new WebSocket(wsUrl.href);
         const argg = new Audio("argg.mp3");
+        const scoreTable = document.getElementById("scoreTable");
         let playerId;
+        function updateScore(score) {
+            const tableRows = scoreTable.rows.length;
+            for (let i = 1; i < tableRows; i++) {
+                scoreTable.deleteRow(1);
+            }
+            for (let i = 0; i < score.length; i++) {
+                const playerScore = score[i];
+                const scoreRow = scoreTable.insertRow(i + 1);
+                scoreRow.insertCell(0).innerText = playerScore.id;
+                scoreRow.insertCell(1).innerText = playerScore.kills;
+                scoreRow.insertCell(2).innerText = playerScore.deaths;
+                scoreRow.insertCell(3).innerText = playerScore.score;
+            }
+        }
         function updateGameState(gameState) {
             for (const player of gameState.players) {
                 let playerDiv = document.getElementById(player.id);
@@ -108,6 +150,9 @@
                     break;
                 case "hit":
                     argg.play();
+                    break;
+                case "score":
+                    updateScore(message.score);
                     break;
                 default:
                     break;

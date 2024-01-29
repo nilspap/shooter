@@ -42,13 +42,31 @@ wss.on('connection', function connection(ws) {
         id: playerId,
         x: 0,
         y: 0,
-        aimDirection: "right"
+        aimDirection: "right",
+        kills: 0,
+        deaths: 0
     };
     playerCounter += 1;
     gameState.players.push(currentPlayer);
     distributeState();
+    distributeScore();
 
     ws.on('error', console.error);
+    function distributeScore() {
+        const score = gameState.players.map(player => {
+            return {
+                id: player.id,
+                kills: player.kills,
+                deaths: player.deaths,
+                score: player.kills - player.deaths
+            }
+        });
+        score.sort((a, b) => b.score - a.score);
+        distributeMessage({
+            type: "score",
+            score
+        });
+    }
     function movePlayer(moveDirection) {
         if (moveDirection == "down") {
             currentPlayer.y += playerSpeed;
@@ -92,7 +110,9 @@ wss.on('connection', function connection(ws) {
                 flightEnded = true;
             }
         }
-        hitCalculation(message);
+        if (hitCalculation(message)) {
+            return;
+        }
         if (flightEnded == false) {
             setTimeout(() => moveBullet(message), message.frameDuration);
         }
@@ -110,8 +130,14 @@ wss.on('connection', function connection(ws) {
                     type: "hit",
                     victim: player.id
                 });
+                player.deaths += 1;
+                const shooter = gameState.players.find(p => p.id == bullet.shooterId);
+                shooter.kills += 1;
                 player.x = 0;
                 player.y = 0;
+                distributeState();
+                distributeScore();
+                return true;
             }
         }
     }
