@@ -98,6 +98,22 @@
                 }
                 playerDiv.style.left = `${player.x}px`;
                 playerDiv.style.top = `${player.y}px`;
+                switch (player.aimDirection) {
+                    case "right":
+                        playerDiv.style.rotate = "90deg";
+                        break;
+                    case "down":
+                        playerDiv.style.rotate = "180deg";
+                        break;
+                    case "left":
+                        playerDiv.style.rotate = "270deg";
+                        break;
+                    case "up":
+                        playerDiv.style.rotate = "0deg";
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         function moveBullet(bulletDiv, bullet) {
