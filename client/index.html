@@ -3,6 +3,11 @@
 <head>
     <title>shooter</title>
     <style>
+        body {
+            background-image: url("resources/steel-flooring-seamless-texture-abstract-industrial-construction-floor-metal-industrial-illustration-industrial-65335368.webp");
+            background-size: 100px 100px;
+        }
+
         .player {
             position: absolute;
             width: 10px;
@@ -62,7 +67,7 @@
         wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
         wsUrl.port = 9206;
         const socket = new WebSocket(wsUrl.href);
-        const argg = new Audio("argg.mp3");
+        const argg = new Audio("resources/argg.mp3");
         const scoreTable = document.getElementById("scoreTable");
         let playerId;
         function updateScore(score) {
