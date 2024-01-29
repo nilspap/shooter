@@ -44,25 +44,32 @@ wss.on('connection', function connection(ws) {
     distributeState();
 
     ws.on('error', console.error);
+    function movePlayer(moveDirection) {
+        if (moveDirection == "down") {
+            player.y += playerSpeed;
+
+        }
+        if (moveDirection == "up") {
+            player.y -= playerSpeed;
+
+        }
+        if (moveDirection == "left") {
+            player.x -= playerSpeed;
+
+        }
+        if (moveDirection == "right") {
+            player.x += playerSpeed;
+
+        }
+        player.aimDirection = moveDirection;
+        distributeState();
+    }
 
     ws.on('message', function message(data) {
         console.log('received: %s', data);
         const command = JSON.parse(data);
-        if (command.action == "down") {
-            player.y += playerSpeed;
-            player.aimDirection = command.action;
-        }
-        if (command.action == "up") {
-            player.y -= playerSpeed;
-            player.aimDirection = command.action;
-        }
-        if (command.action == "left") {
-            player.x -= playerSpeed;
-            player.aimDirection = command.action;
-        }
-        if (command.action == "right") {
-            player.x += playerSpeed;
-            player.aimDirection = command.action;
+        if (command.action == "move") {
+            movePlayer(command.moveDirection);
         }
         if (command.action == "shoot") {
             distributeMessage({
@@ -75,7 +82,7 @@ wss.on('connection', function connection(ws) {
             })
         }
         console.log(JSON.stringify(gameState))
-        distributeState();
+
 
     });
 });

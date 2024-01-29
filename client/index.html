@@ -67,28 +67,33 @@
                     break;
             }
         });
-
+        function sendMoveAction(moveDirection) {
+            sendAction({
+                action: "move",
+                moveDirection: moveDirection
+            });
+        }
         function sendAction(action) {
-            socket.send(JSON.stringify({
-                player: "player1",
-                action: action
-            }));
+            socket.send(JSON.stringify(action));
+
         }
         document.onkeydown = function (ev) {
             if (ev.key == "ArrowDown" || ev.key == "s") {
-                sendAction("down");
+                sendMoveAction("down");
             }
             if (ev.key == "ArrowUp" || ev.key == "w") {
-                sendAction("up");
+                sendMoveAction("up");
             }
             if (ev.key == "ArrowLeft" || ev.key == "a") {
-                sendAction("left");
+                sendMoveAction("left");
             }
             if (ev.key == "ArrowRight" || ev.key == "d") {
-                sendAction("right");
+                sendMoveAction("right");
             }
             if (ev.code == "Space") {
-                sendAction("shoot");
+                sendAction({
+                    action: "shoot"
+                });
             }
 
         }
