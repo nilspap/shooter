@@ -16,7 +16,8 @@ const gameState = {
 }
 const playerSpeed = 5;
 const bulletSpeed = 10;
-const flightDistance = 100;
+const flightDistance = 200;
+const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 const frameDuration = 16;
 const playerSize = 10;
 const bulletSize = 2;
@@ -104,34 +105,41 @@ wss.on('connection', function connection(ws) {
         currentPlayer.aimDirection = moveDirection;
         distributeState();
     }
-    function moveBullet(message) {
+    function moveBullet(bullet) {
         let flightEnded = false;
-        if (message.flightDirection == "up") {
-            message.y -= message.bulletSpeed;
-            if (message.y <= message.bulletTargetY) {
+        console.log(`move bullet: ${JSON.stringify(bullet)}`);
+        if (bullet.flightDirection == "up") {
+            bullet.y -= bullet.bulletSpeed;
+            if (bullet.y <= bullet.bulletTargetY) {
                 flightEnded = true;
             }
-        } else if (message.flightDirection == "down") {
-            message.y += message.bulletSpeed;
-            if (message.y >= message.bulletTargetY) {
+        } else if (bullet.flightDirection == "down") {
+            bullet.y += bullet.bulletSpeed;
+            if (bullet.y >= bullet.bulletTargetY) {
                 flightEnded = true;
             }
-        } else if (message.flightDirection == "left") {
-            message.x -= message.bulletSpeed;
-            if (message.x <= message.bulletTargetX) {
+        } else if (bullet.flightDirection == "left") {
+            bullet.x -= bullet.bulletSpeed;
+            if (bullet.x <= bullet.bulletTargetX) {
                 flightEnded = true;
             }
-        } else if (message.flightDirection == "right") {
-            message.x += message.bulletSpeed;
-            if (message.x >= message.bulletTargetX) {
+        } else if (bullet.flightDirection == "right") {
+            bullet.x += bullet.bulletSpeed;
+            if (bullet.x >= bullet.bulletTargetX) {
+                flightEnded = true;
+            }
+        } else if (bullet.flightDirection == "down-right") {
+            bullet.x += bullet.bulletSpeed;
+            bullet.y += bullet.bulletSpeed;
+            if (bullet.x >= bullet.bulletTargetX && bullet.y >= bullet.bulletTargetY) {
                 flightEnded = true;
             }
         }
-        if (hitCalculation(message)) {
+        if (hitCalculation(bullet)) {
             return;
         }
         if (flightEnded == false) {
-            setTimeout(() => moveBullet(message), message.frameDuration);
+            setTimeout(() => moveBullet(bullet), bullet.frameDuration);
         }
     }
     function hitCalculation(bullet) {
@@ -143,6 +151,7 @@ wss.on('connection', function connection(ws) {
                 && (bullet.x - bulletSize) <= (player.x + playerSize)
                 && bullet.y >= player.y
                 && (bullet.y - bulletSize) <= player.y + playerSize) {
+                console.log(`hit: ${player.id}`);
                 distributeMessage({
                     type: "hit",
                     victim: player.id
@@ -169,6 +178,18 @@ wss.on('connection', function connection(ws) {
             bulletTargetX -= flightDistance;
         } else if (currentPlayer.aimDirection == "right") {
             bulletTargetX += flightDistance;
+        } else if (currentPlayer.aimDirection == "down-right") {
+            bulletTargetX += flightDistanceDiag;
+            bulletTargetY += flightDistanceDiag;
+        } else if (currentPlayer.aimDirection == "down-left") {
+            bulletTargetX -= flightDistanceDiag;
+            bulletTargetY += flightDistanceDiag;
+        } else if (currentPlayer.aimDirection == "up-right") {
+            bulletTargetX += flightDistanceDiag;
+            bulletTargetY -= flightDistanceDiag;
+        } else if (currentPlayer.aimDirection == "up-left") {
+            bulletTargetX -= flightDistanceDiag;
+            bulletTargetY -= flightDistanceDiag;
         }
         const message = {
             type: "bullet",
@@ -185,7 +206,7 @@ wss.on('connection', function connection(ws) {
         distributeMessage(message);
     }
     ws.on('message', function message(data) {
-        console.log('received: %s', data);
+        // console.log('received: %s', data);
         const command = JSON.parse(data);
         if (command.action == "move") {
             movePlayer(command.moveDirection);
@@ -193,8 +214,6 @@ wss.on('connection', function connection(ws) {
         if (command.action == "shoot") {
             shoot();
         }
-        console.log(JSON.stringify(gameState));
-
-
+        // console.log(JSON.stringify(gameState));
     });
 });

@@ -117,6 +117,30 @@
                 if (message.x >= message.bulletTargetX) {
                     flightEnded = true;
                 }
+            } else if (message.flightDirection == "down-right") {
+                message.x += message.bulletSpeed;
+                message.y += message.bulletSpeed;
+                if (message.x >= message.bulletTargetX && message.y >= message.bulletTargetY) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "down-left") {
+                message.x -= message.bulletSpeed;
+                message.y += message.bulletSpeed;
+                if (message.x <= message.bulletTargetX && message.y >= message.bulletTargetY) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "up-right") {
+                message.x += message.bulletSpeed;
+                message.y -= message.bulletSpeed;
+                if (message.x >= message.bulletTargetX && message.y <= message.bulletTargetY) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "up-left") {
+                message.x -= message.bulletSpeed;
+                message.y -= message.bulletSpeed;
+                if (message.x <= message.bulletTargetX && message.y <= message.bulletTargetY) {
+                    flightEnded = true;
+                }
             }
             bullet.style.left = `${message.x}px`;
             bullet.style.top = `${message.y}px`;
@@ -136,7 +160,7 @@
         }
         // Listen for messages
         socket.addEventListener("message", (event) => {
-            console.log("Message from server ", event.data);
+            // console.log("Message from server ", event.data);
             const message = JSON.parse(event.data);
             switch (message.type) {
                 case "gameState":
