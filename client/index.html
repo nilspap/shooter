@@ -31,9 +31,11 @@
     <script>
         // Create WebSocket connection.
         var wsUrl = new URL('', window.location.href);
+
         wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
         wsUrl.port = 9206;
         const socket = new WebSocket(wsUrl.href);
+        const argg = new Audio("argg.mp3");
         let playerId;
         function updateGameState(gameState) {
             for (const player of gameState.players) {
@@ -105,7 +107,7 @@
                     createBullet(message);
                     break;
                 case "hit":
-                    alert(message.victim);
+                    argg.play();
                     break;
                 default:
                     break;

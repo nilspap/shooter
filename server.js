@@ -109,7 +109,9 @@ wss.on('connection', function connection(ws) {
                 distributeMessage({
                     type: "hit",
                     victim: player.id
-                })
+                });
+                player.x = 0;
+                player.y = 0;
             }
         }
     }
