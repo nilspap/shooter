@@ -98,6 +98,7 @@
                 }
                 playerDiv.style.left = `${player.x}px`;
                 playerDiv.style.top = `${player.y}px`;
+                const oldRotation = playerDiv.style.rotate;
                 switch (player.aimDirection) {
                     case "right":
                         playerDiv.style.rotate = "90deg";
@@ -126,6 +127,7 @@
                     default:
                         break;
                 }
+                playerDiv.animate([{ rotate: oldRotation }, { rotate: playerDiv.style.rotate }], { duration: 50 });
             }
         }
         function moveBullet(bulletDiv, bullet) {
