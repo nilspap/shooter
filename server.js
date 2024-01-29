@@ -85,6 +85,19 @@ wss.on('connection', function connection(ws) {
                 currentPlayer.y += playerSpeed;
                 currentPlayer.x += playerSpeed;
                 break;
+            case "down-left":
+                currentPlayer.y += playerSpeed;
+                currentPlayer.x -= playerSpeed;
+                break;
+            case "up-right":
+                currentPlayer.y -= playerSpeed;
+                currentPlayer.x += playerSpeed;
+                break;
+            case "up-left":
+                currentPlayer.y -= playerSpeed;
+                currentPlayer.x -= playerSpeed;
+                break;
+
             default:
                 break;
         }
