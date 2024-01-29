@@ -51,7 +51,45 @@
                 playerDiv.style.top = `${player.y}px`;
             }
         }
-
+        function moveBullet(bullet, message) {
+            let flightEnded = false;
+            if (message.flightDirection == "up") {
+                message.y -= message.bulletSpeed;
+                if (message.y <= message.bulletTargetY) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "down") {
+                message.y += message.bulletSpeed;
+                if (message.y >= message.bulletTargetY) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "left") {
+                message.x -= message.bulletSpeed;
+                if (message.x <= message.bulletTargetX) {
+                    flightEnded = true;
+                }
+            } else if (message.flightDirection == "right") {
+                message.x += message.bulletSpeed;
+                if (message.x >= message.bulletTargetX) {
+                    flightEnded = true;
+                }
+            }
+            bullet.style.left = `${message.x}px`;
+            bullet.style.top = `${message.y}px`;
+            if (flightEnded == false) {
+                setTimeout(() => moveBullet(bullet, message), 16);
+            } else {
+                setTimeout(() => bullet.remove(), 200);
+            }
+        }
+        function createBullet(message) {
+            const bullet = document.createElement("div");
+            bullet.style.left = `${message.x}px`;
+            bullet.style.top = `${message.y}px`;
+            bullet.classList.add("bullet");
+            document.body.append(bullet);
+            moveBullet(bullet, message);
+        }
         // Listen for messages
         socket.addEventListener("message", (event) => {
             console.log("Message from server ", event.data);
@@ -62,6 +100,9 @@
                     break;
                 case "currentPlayerId":
                     playerId = message.playerId;
+                    break;
+                case "bullet":
+                    createBullet(message);
                     break;
                 default:
                     break;

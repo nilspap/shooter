@@ -15,6 +15,8 @@ const gameState = {
     players: []
 }
 const playerSpeed = 5;
+const bulletSpeed = 10;
+const flightDistance = 100;
 let playerCounter = 1;
 function distributeMessage(message) {
     const messageString = JSON.stringify(message);
@@ -64,7 +66,29 @@ wss.on('connection', function connection(ws) {
         player.aimDirection = moveDirection;
         distributeState();
     }
-
+    function shoot() {
+        let bulletTargetX = player.x;
+        let bulletTargetY = player.y;
+        if (player.aimDirection == "up") {
+            bulletTargetY -= flightDistance;
+        } else if (player.aimDirection == "down") {
+            bulletTargetY += flightDistance;
+        } else if (player.aimDirection == "left") {
+            bulletTargetX -= flightDistance;
+        } else if (player.aimDirection == "right") {
+            bulletTargetX += flightDistance;
+        }
+        distributeMessage({
+            type: "bullet",
+            x: player.x,
+            y: player.y,
+            flightDirection: player.aimDirection,
+            bulletSpeed: bulletSpeed,
+            shooterId: playerId,
+            bulletTargetX: bulletTargetX,
+            bulletTargetY: bulletTargetY
+        });
+    }
     ws.on('message', function message(data) {
         console.log('received: %s', data);
         const command = JSON.parse(data);
@@ -72,16 +96,9 @@ wss.on('connection', function connection(ws) {
             movePlayer(command.moveDirection);
         }
         if (command.action == "shoot") {
-            distributeMessage({
-                type: "bullet",
-                x: player.x,
-                y: player.y,
-                flightDirection: player.aimDirection,
-                shooterId: playerId,
-                flightDistance: 100
-            })
+            shoot();
         }
-        console.log(JSON.stringify(gameState))
+        console.log(JSON.stringify(gameState));
 
 
     });
