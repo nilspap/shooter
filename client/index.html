@@ -95,59 +95,59 @@
                 playerDiv.style.top = `${player.y}px`;
             }
         }
-        function moveBullet(bullet, message) {
+        function moveBullet(bulletDiv, bullet) {
             let flightEnded = false;
-            if (message.flightDirection == "up") {
-                message.y -= message.bulletSpeed;
-                if (message.y <= message.bulletTargetY) {
+            if (bullet.flightDirection == "up") {
+                bullet.y -= bullet.bulletSpeed;
+                if (bullet.y <= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "down") {
-                message.y += message.bulletSpeed;
-                if (message.y >= message.bulletTargetY) {
+            } else if (bullet.flightDirection == "down") {
+                bullet.y += bullet.bulletSpeed;
+                if (bullet.y >= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "left") {
-                message.x -= message.bulletSpeed;
-                if (message.x <= message.bulletTargetX) {
+            } else if (bullet.flightDirection == "left") {
+                bullet.x -= bullet.bulletSpeed;
+                if (bullet.x <= bullet.bulletTargetX) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "right") {
-                message.x += message.bulletSpeed;
-                if (message.x >= message.bulletTargetX) {
+            } else if (bullet.flightDirection == "right") {
+                bullet.x += bullet.bulletSpeed;
+                if (bullet.x >= bullet.bulletTargetX) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "down-right") {
-                message.x += message.bulletSpeed;
-                message.y += message.bulletSpeed;
-                if (message.x >= message.bulletTargetX && message.y >= message.bulletTargetY) {
+            } else if (bullet.flightDirection == "down-right") {
+                bullet.x += bullet.bulletSpeed;
+                bullet.y += bullet.bulletSpeed;
+                if (bullet.x >= bullet.bulletTargetX && bullet.y >= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "down-left") {
-                message.x -= message.bulletSpeed;
-                message.y += message.bulletSpeed;
-                if (message.x <= message.bulletTargetX && message.y >= message.bulletTargetY) {
+            } else if (bullet.flightDirection == "down-left") {
+                bullet.x -= bullet.bulletSpeed;
+                bullet.y += bullet.bulletSpeed;
+                if (bullet.x <= bullet.bulletTargetX && bullet.y >= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "up-right") {
-                message.x += message.bulletSpeed;
-                message.y -= message.bulletSpeed;
-                if (message.x >= message.bulletTargetX && message.y <= message.bulletTargetY) {
+            } else if (bullet.flightDirection == "up-right") {
+                bullet.x += bullet.bulletSpeed;
+                bullet.y -= bullet.bulletSpeed;
+                if (bullet.x >= bullet.bulletTargetX && bullet.y <= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
-            } else if (message.flightDirection == "up-left") {
-                message.x -= message.bulletSpeed;
-                message.y -= message.bulletSpeed;
-                if (message.x <= message.bulletTargetX && message.y <= message.bulletTargetY) {
+            } else if (bullet.flightDirection == "up-left") {
+                bullet.x -= bullet.bulletSpeed;
+                bullet.y -= bullet.bulletSpeed;
+                if (bullet.x <= bullet.bulletTargetX && bullet.y <= bullet.bulletTargetY) {
                     flightEnded = true;
                 }
             }
-            bullet.style.left = `${message.x}px`;
-            bullet.style.top = `${message.y}px`;
+            bulletDiv.style.left = `${bullet.x}px`;
+            bulletDiv.style.top = `${bullet.y}px`;
             if (flightEnded == false) {
-                setTimeout(() => moveBullet(bullet, message), message.frameDuration);
+                setTimeout(() => moveBullet(bulletDiv, bullet), bullet.frameDuration);
             } else {
-                setTimeout(() => bullet.remove(), 200);
+                setTimeout(() => bulletDiv.remove(), 200);
             }
         }
         function createBullet(message) {

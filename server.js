@@ -16,7 +16,7 @@ const gameState = {
 }
 const playerSpeed = 5;
 const bulletSpeed = 10;
-const flightDistance = 200;
+const flightDistance = 100;
 const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 const frameDuration = 16;
 const playerSize = 10;
@@ -132,6 +132,24 @@ wss.on('connection', function connection(ws) {
             bullet.x += bullet.bulletSpeed;
             bullet.y += bullet.bulletSpeed;
             if (bullet.x >= bullet.bulletTargetX && bullet.y >= bullet.bulletTargetY) {
+                flightEnded = true;
+            }
+        } else if (bullet.flightDirection == "down-left") {
+            bullet.x -= bullet.bulletSpeed;
+            bullet.y += bullet.bulletSpeed;
+            if (bullet.x <= bullet.bulletTargetX && bullet.y >= bullet.bulletTargetY) {
+                flightEnded = true;
+            }
+        } else if (bullet.flightDirection == "up-right") {
+            bullet.x += bullet.bulletSpeed;
+            bullet.y -= bullet.bulletSpeed;
+            if (bullet.x >= bullet.bulletTargetX && bullet.y <= bullet.bulletTargetY) {
+                flightEnded = true;
+            }
+        } else if (bullet.flightDirection == "up-left") {
+            bullet.x -= bullet.bulletSpeed;
+            bullet.y -= bullet.bulletSpeed;
+            if (bullet.x <= bullet.bulletTargetX && bullet.y <= bullet.bulletTargetY) {
                 flightEnded = true;
             }
         }
