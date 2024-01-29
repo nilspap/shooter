@@ -77,7 +77,7 @@
             bullet.style.left = `${message.x}px`;
             bullet.style.top = `${message.y}px`;
             if (flightEnded == false) {
-                setTimeout(() => moveBullet(bullet, message), 16);
+                setTimeout(() => moveBullet(bullet, message), message.frameDuration);
             } else {
                 setTimeout(() => bullet.remove(), 200);
             }
@@ -103,6 +103,9 @@
                     break;
                 case "bullet":
                     createBullet(message);
+                    break;
+                case "hit":
+                    alert(message.victim);
                     break;
                 default:
                     break;
