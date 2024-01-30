@@ -16,11 +16,13 @@ const gameState = {
 }
 const playerSpeed = 5;
 const bulletSpeed = 10;
-const flightDistance = 100;
+const flightDistance = 200;
 const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 const frameDuration = 16;
 const playerSize = 50;
 const bulletSize = 2;
+const gunOffset = 33;
+const gunOffsetShort = 13;
 let playerCounter = 1;
 function distributeMessage(message) {
     const messageString = JSON.stringify(message);
@@ -192,25 +194,34 @@ wss.on('connection', function connection(ws) {
         let startY = currentPlayer.y;
         let bulletTargetX = startX;
         let bulletTargetY = startY;
+        let bulletTargetEndX = bulletTargetX;
         if (currentPlayer.aimDirection == "up") {
-            startX += playerSize;
+            startX += gunOffset;
             bulletTargetY -= flightDistance;
         } else if (currentPlayer.aimDirection == "down") {
+            startX += gunOffsetShort;
             bulletTargetY += flightDistance;
         } else if (currentPlayer.aimDirection == "left") {
+            startY += gunOffsetShort;
             bulletTargetX -= flightDistance;
         } else if (currentPlayer.aimDirection == "right") {
+            startY += gunOffset;
             bulletTargetX += flightDistance;
         } else if (currentPlayer.aimDirection == "down-right") {
+            startX -= gunOffsetShort;
             bulletTargetX += flightDistanceDiag;
             bulletTargetY += flightDistanceDiag;
         } else if (currentPlayer.aimDirection == "down-left") {
+            startX += gunOffset;
             bulletTargetX -= flightDistanceDiag;
             bulletTargetY += flightDistanceDiag;
         } else if (currentPlayer.aimDirection == "up-right") {
+            startX += gunOffset;
+            startY += gunOffset;
             bulletTargetX += flightDistanceDiag;
             bulletTargetY -= flightDistanceDiag;
         } else if (currentPlayer.aimDirection == "up-left") {
+            startX += gunOffsetShort;
             bulletTargetX -= flightDistanceDiag;
             bulletTargetY -= flightDistanceDiag;
         }
@@ -218,6 +229,8 @@ wss.on('connection', function connection(ws) {
             type: "bullet",
             x: startX,
             y: startY,
+            width: bulletSize,
+            height: bulletSize,
             flightDirection: currentPlayer.aimDirection,
             bulletSpeed: bulletSpeed,
             shooterId: playerId,

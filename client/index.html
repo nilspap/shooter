@@ -20,8 +20,6 @@
 
         .bullet {
             position: absolute;
-            /* width: 2px; */
-            /* height: 2px; */
             background-color: black;
         }
 
@@ -39,6 +37,12 @@
             color: orange;
             text-align: center;
             border: 1px solid black;
+        }
+
+        .wall {
+            width: 10px;
+            height: 12px;
+            background-color: black;
         }
     </style>
 </head>
@@ -192,6 +196,8 @@
             const bullet = document.createElement("div");
             bullet.style.left = `${message.x}px`;
             bullet.style.top = `${message.y}px`;
+            bullet.style.width = `${message.width}px`;
+            bullet.style.height = `${message.height}px`;
             bullet.classList.add("bullet");
             document.body.append(bullet);
             moveBullet(bullet, message);
