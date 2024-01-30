@@ -205,7 +205,7 @@ wss.on('connection', function connection(ws) {
         console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
         if (((obj1.x + obj1.width) >= obj2.x)
             && (obj1.x - obj1.width) <= (obj2.x + obj2.width)
-            && obj1.y >= obj2.y
+            && ((obj1.y + obj1.height) >= obj2.y)
             && (obj1.y - obj1.width) <= obj2.y + obj2.width) {
             console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
             return true;
