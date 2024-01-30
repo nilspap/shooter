@@ -252,4 +252,12 @@ wss.on('connection', function connection(ws) {
         }
         // console.log(JSON.stringify(gameState));
     });
+    ws.on('close', function close() {
+        const index = gameState.players.indexOf(currentPlayer);
+        if (index > -1) {
+            gameState.players.splice(index, 1);
+        }
+        distributeState();
+        distributeScore();
+    });
 });

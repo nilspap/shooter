@@ -88,6 +88,7 @@
             }
         }
         function updateGameState(gameState) {
+            const currentPlayerDivs = Array.from(document.getElementsByClassName("player"));
             for (const player of gameState.players) {
                 let playerDiv = document.getElementById(player.id);
                 if (!playerDiv) {
@@ -102,6 +103,11 @@
                         playerDiv.style.borderRadius = `${player.height / 2}px`;
                     }
                     document.body.append(playerDiv);
+                } else {
+                    const index = currentPlayerDivs.indexOf(playerDiv);
+                    if (index > -1) {
+                        currentPlayerDivs.splice(index, 1);
+                    }
                 }
                 playerDiv.style.left = `${player.x}px`;
                 playerDiv.style.top = `${player.y}px`;
@@ -135,6 +141,9 @@
                         break;
                 }
                 playerDiv.animate([{ rotate: oldRotation }, { rotate: playerDiv.style.rotate }], { duration: 50 });
+            }
+            for (const removedPlayerDiv of currentPlayerDivs) {
+                removedPlayerDiv.remove();
             }
         }
         function moveBullet(bulletDiv, bullet) {
