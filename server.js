@@ -17,12 +17,12 @@ const gameState = {
 const playerSpeed = 5;
 const bulletSpeed = 10;
 const flightDistance = 200;
-const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 const frameDuration = 16;
 const playerSize = 50;
 const bulletSize = 2;
 const gunOffset = 33;
 const gunOffsetShort = 13;
+const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 let playerCounter = 1;
 function distributeMessage(message) {
     const messageString = JSON.stringify(message);
@@ -206,7 +206,7 @@ wss.on('connection', function connection(ws) {
             bulletTargetX -= flightDistance;
         } else if (currentPlayer.aimDirection == "right") {
             startY += gunOffset;
-            bulletTargetX += flightDistance;
+            bulletTargetX += flightDistance + gunOffset;
         } else if (currentPlayer.aimDirection == "down-right") {
             startX -= gunOffsetShort;
             bulletTargetX += flightDistanceDiag;

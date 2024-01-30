@@ -194,6 +194,8 @@
         }
         function createBullet(message) {
             const bullet = document.createElement("div");
+            const shot = new Audio("resources/shot.mp3");
+            shot.play();
             bullet.style.left = `${message.x}px`;
             bullet.style.top = `${message.y}px`;
             bullet.style.width = `${message.width}px`;
