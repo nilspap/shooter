@@ -39,9 +39,8 @@
             border: 1px solid black;
         }
 
-        .wall {
-            width: 10px;
-            height: 12px;
+        .brick {
+            position: absolute;
             background-color: black;
         }
     </style>
@@ -213,7 +212,17 @@
             document.body.append(bullet);
             moveBullet(bullet, message);
         }
-        // Listen for messages
+        function createLevel(level) {
+            for (const brick of level.bricks) {
+                const brickDiv = document.createElement("div");
+                brickDiv.style.left = `${brick.x}px`;
+                brickDiv.style.top = `${brick.y}px`;
+                brickDiv.style.width = `${brick.width}px`;
+                brickDiv.style.height = `${brick.height}px`;
+                brickDiv.classList.add("brick");
+                document.body.append(brickDiv);
+            }
+        }
         socket.addEventListener("message", (event) => {
             console.log("Message from server ", event.data);
             const message = JSON.parse(event.data);
@@ -232,6 +241,9 @@
                     break;
                 case "score":
                     updateScore(message.score);
+                    break;
+                case "level":
+                    createLevel(message.level);
                     break;
                 default:
                     break;

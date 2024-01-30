@@ -13,7 +13,15 @@ server.listen(8080, function () {
 const gameState = {
     type: "gameState",
     players: []
-}
+};
+const level = {
+    bricks: [{
+        x: 100,
+        y: 100,
+        width: 100,
+        height: 100
+    }]
+};
 const playerSpeed = 5;
 const bulletSpeed = 10;
 const flightDistance = 200;
@@ -37,10 +45,17 @@ function distributeState() {
 }
 wss.on('connection', function connection(ws) {
     const playerId = `player${playerCounter}`;
-    ws.send(JSON.stringify({
+    function sendMessage(message) {
+        ws.send(JSON.stringify(message));
+    }
+    sendMessage({
         type: "currentPlayerId",
         playerId: playerId
-    }));
+    });
+    sendMessage({
+        type: "level",
+        level: level
+    })
     const currentPlayer = {
         id: playerId,
         width: playerSize,
@@ -73,38 +88,60 @@ wss.on('connection', function connection(ws) {
         });
     }
     function movePlayer(moveDirection) {
+        //console.log(JSON.stringify(currentPlayer));
+        let newX = currentPlayer.x;
+        let newY = currentPlayer.y;
+
         switch (moveDirection) {
             case "down":
-                currentPlayer.y += playerSpeed;
+                newY += playerSpeed;
                 break;
             case "up":
-                currentPlayer.y -= playerSpeed;
+                if (newY > 0) {
+                    newY -= playerSpeed;
+                }
                 break;
             case "left":
-                currentPlayer.x -= playerSpeed;
+                newX -= playerSpeed;
                 break;
             case "right":
-                currentPlayer.x += playerSpeed;
+                newX += playerSpeed;
                 break;
             case "down-right":
-                currentPlayer.y += playerSpeed;
-                currentPlayer.x += playerSpeed;
+                newY += playerSpeed;
+                newX += playerSpeed;
                 break;
             case "down-left":
-                currentPlayer.y += playerSpeed;
-                currentPlayer.x -= playerSpeed;
+                newY += playerSpeed;
+                newX -= playerSpeed;
                 break;
             case "up-right":
-                currentPlayer.y -= playerSpeed;
-                currentPlayer.x += playerSpeed;
+                newY -= playerSpeed;
+                newX += playerSpeed;
                 break;
             case "up-left":
-                currentPlayer.y -= playerSpeed;
-                currentPlayer.x -= playerSpeed;
+                newY -= playerSpeed;
+                newX -= playerSpeed;
                 break;
 
             default:
                 break;
+        }
+        const newPlayerPosition = {
+            x: newX,
+            y: newY,
+            width: currentPlayer.width,
+            height: currentPlayer.height
+        };
+        const mauer = {
+            x: 100,
+            y: 100,
+            width: 100,
+            height: 100
+        };
+        if (!hitCalculation(newPlayerPosition, mauer)) {
+            currentPlayer.x = newX;
+            currentPlayer.y = newY;
         }
         currentPlayer.aimDirection = moveDirection;
         distributeState();
@@ -157,22 +194,29 @@ wss.on('connection', function connection(ws) {
                 flightEnded = true;
             }
         }
-        if (hitCalculation(bullet)) {
+        if (bulletHitCalculation(bullet)) {
             return;
         }
         if (flightEnded == false) {
             setTimeout(() => moveBullet(bullet), bullet.frameDuration);
         }
     }
-    function hitCalculation(bullet) {
+    function hitCalculation(obj1, obj2) {
+        console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
+        if (((obj1.x + obj1.width) >= obj2.x)
+            && (obj1.x - obj1.width) <= (obj2.x + obj2.width)
+            && obj1.y >= obj2.y
+            && (obj1.y - obj1.width) <= obj2.y + obj2.width) {
+            console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
+            return true;
+        }
+    }
+    function bulletHitCalculation(bullet) {
         for (const player of gameState.players) {
             if (player == currentPlayer) {
                 continue;
             }
-            if (bullet.x >= player.x
-                && (bullet.x - bulletSize) <= (player.x + playerSize)
-                && bullet.y >= player.y
-                && (bullet.y - bulletSize) <= player.y + playerSize) {
+            if (hitCalculation(bullet, player)) {
                 console.log(`hit: ${player.id}`);
                 distributeMessage({
                     type: "hit",
