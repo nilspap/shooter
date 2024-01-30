@@ -10,19 +10,18 @@
 
         .player {
             background-image: url("resources/soldier.png");
-            background-size: 50px 50px;
             background-repeat: no-repeat;
             position: absolute;
-            width: 50px;
-            height: 50px;
         }
 
-        .currentPlayer {}
+        .currentPlayer {
+            background-color: #ffff004d;
+        }
 
         .bullet {
             position: absolute;
-            width: 2px;
-            height: 2px;
+            /* width: 2px; */
+            /* height: 2px; */
             background-color: black;
         }
 
@@ -90,9 +89,13 @@
                 if (!playerDiv) {
                     playerDiv = document.createElement("div");
                     playerDiv.id = player.id;
+                    playerDiv.style.width = `${player.width}px`;
+                    playerDiv.style.height = `${player.height}px`;
+                    playerDiv.style.backgroundSize = `${player.width}px ${player.height}px`;
                     playerDiv.classList.add("player");
                     if (player.id == playerId) {
                         playerDiv.classList.add("currentPlayer");
+                        playerDiv.style.borderRadius = `${player.height / 2}px`;
                     }
                     document.body.append(playerDiv);
                 }
@@ -195,7 +198,7 @@
         }
         // Listen for messages
         socket.addEventListener("message", (event) => {
-            // console.log("Message from server ", event.data);
+            console.log("Message from server ", event.data);
             const message = JSON.parse(event.data);
             switch (message.type) {
                 case "gameState":

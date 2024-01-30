@@ -19,7 +19,7 @@ const bulletSpeed = 10;
 const flightDistance = 100;
 const flightDistanceDiag = Math.cos(45 * Math.PI / 180) * flightDistance;
 const frameDuration = 16;
-const playerSize = 10;
+const playerSize = 50;
 const bulletSize = 2;
 let playerCounter = 1;
 function distributeMessage(message) {
@@ -41,6 +41,8 @@ wss.on('connection', function connection(ws) {
     }));
     const currentPlayer = {
         id: playerId,
+        width: playerSize,
+        height: playerSize,
         x: 0,
         y: 0,
         aimDirection: "right",
@@ -186,9 +188,12 @@ wss.on('connection', function connection(ws) {
         }
     }
     function shoot() {
-        let bulletTargetX = currentPlayer.x;
-        let bulletTargetY = currentPlayer.y;
+        let startX = currentPlayer.x;
+        let startY = currentPlayer.y;
+        let bulletTargetX = startX;
+        let bulletTargetY = startY;
         if (currentPlayer.aimDirection == "up") {
+            startX += playerSize;
             bulletTargetY -= flightDistance;
         } else if (currentPlayer.aimDirection == "down") {
             bulletTargetY += flightDistance;
@@ -211,8 +216,8 @@ wss.on('connection', function connection(ws) {
         }
         const message = {
             type: "bullet",
-            x: currentPlayer.x,
-            y: currentPlayer.y,
+            x: startX,
+            y: startY,
             flightDirection: currentPlayer.aimDirection,
             bulletSpeed: bulletSpeed,
             shooterId: playerId,
