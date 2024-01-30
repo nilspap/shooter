@@ -196,12 +196,31 @@
             }
             bulletDiv.style.left = `${bullet.x}px`;
             bulletDiv.style.top = `${bullet.y}px`;
+
+            // for (const brick of level.bricks) {
+            //     if (hitCalculation(bullet, brick)) {
+            //         flightEnded = true;
+            //         break;
+            //     }
+            // }
+
             if (flightEnded == false) {
                 setTimeout(() => moveBullet(bulletDiv, bullet), bullet.frameDuration);
             } else {
                 setTimeout(() => bulletDiv.remove(), 200);
             }
         }
+
+        // function hitCalculation(obj1, obj2) {
+        //     console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
+        //     if (((obj1.x + obj1.width - playerSpeed) >= obj2.x)
+        //         && (obj1.x - obj1.width + playerSpeed) <= (obj2.x + obj2.width / 2)
+        //         && ((obj1.y + obj1.height - playerSpeed) >= obj2.y)
+        //         && (obj1.y - obj1.width + playerSpeed) <= obj2.y + obj2.width / 2) {
+        //         console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
+        //         return true;
+        //     }
+        // }
         function createBullet(message) {
             const bullet = document.createElement("div");
             const shot = new Audio("resources/shot.mp3");
