@@ -20,6 +20,11 @@ const level = {
         y: 100,
         width: 100,
         height: 100
+    }, {
+        x: 300,
+        y: 100,
+        width: 100,
+        height: 100
     }]
 };
 const playerSpeed = 5;
@@ -204,10 +209,10 @@ wss.on('connection', function connection(ws) {
     }
     function hitCalculation(obj1, obj2) {
         console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
-        if (((obj1.x + obj1.width) >= obj2.x)
-            && (obj1.x - obj1.width) <= (obj2.x + obj2.width)
-            && ((obj1.y + obj1.height) >= obj2.y)
-            && (obj1.y - obj1.width) <= obj2.y + obj2.width) {
+        if (((obj1.x + obj1.width - playerSpeed) >= obj2.x)
+            && (obj1.x - obj1.width + playerSpeed) <= (obj2.x + obj2.width / 2)
+            && ((obj1.y + obj1.height - playerSpeed) >= obj2.y)
+            && (obj1.y - obj1.width + playerSpeed) <= obj2.y + obj2.width / 2) {
             console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
             return true;
         }
