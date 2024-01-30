@@ -133,13 +133,14 @@ wss.on('connection', function connection(ws) {
             width: currentPlayer.width,
             height: currentPlayer.height
         };
-        const mauer = {
-            x: 100,
-            y: 100,
-            width: 100,
-            height: 100
-        };
-        if (!hitCalculation(newPlayerPosition, mauer)) {
+        let hitObstackle = false;
+        for (const brick of level.bricks) {
+            if (hitCalculation(newPlayerPosition, brick)) {
+                hitObstackle = true;
+                break;
+            }
+        }
+        if (hitObstackle == false) {
             currentPlayer.x = newX;
             currentPlayer.y = newY;
         }
