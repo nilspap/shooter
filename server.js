@@ -4,6 +4,7 @@ const wss = new WebSocket.Server({
     port: 9206
 });
 const http = require('http');
+const { spawn } = require('child_process');
 const app = express();
 app.use(express.static('client'));
 const server = http.createServer(app);
@@ -27,6 +28,17 @@ const level = {
         height: 100
     }]
 };
+const playerSpawnPoints = [{
+    x: 10,
+    y: 10
+}, {
+    x: 220,
+    y: 125
+}, {
+    x: 20,
+    y: 230
+}];
+
 const playerSpeed = 5;
 const bulletSpeed = 10;
 const flightDistance = 200;
@@ -60,17 +72,31 @@ wss.on('connection', function connection(ws) {
     sendMessage({
         type: "level",
         level: level
-    })
+    });
+    function setSpawnPoint(player) {
+        do {
+            const randomNumber = Math.floor(Math.random() * (playerSpawnPoints.length));
+            let spawnPoint = playerSpawnPoints[randomNumber];
+            spawnPoint.height = playerSize;
+            spawnPoint.width = playerSize;
+            if (playerHitCalculation(spawnPoint)) {
+                console.log("spawn point conflict: " + JSON.stringify(spawnPoint));
+                continue;
+            }
+            player.x = spawnPoint.x;
+            player.y = spawnPoint.y;
+            return;
+        } while (true);
+    }
     const currentPlayer = {
         id: playerId,
         width: playerSize,
         height: playerSize,
-        x: 0,
-        y: 0,
         aimDirection: "right",
         kills: 0,
         deaths: 0
     };
+    setSpawnPoint(currentPlayer);
     playerCounter += 1;
     gameState.players.push(currentPlayer);
     distributeState();
@@ -144,6 +170,9 @@ wss.on('connection', function connection(ws) {
                 hitObstackle = true;
                 break;
             }
+        }
+        if (playerHitCalculation(currentPlayer)) {
+            hitObstackle = true;
         }
         if (hitObstackle == false) {
             currentPlayer.x = newX;
@@ -225,6 +254,16 @@ wss.on('connection', function connection(ws) {
         // console.log(`hit calculation result : ${hit} details: ${JSON.stringify(obj1Bounds)} and ${JSON.stringify(obj2Bounds)}`)
         return hit;
     }
+    function playerHitCalculation(target) {
+        for (const player of gameState.players) {
+            if (player == currentPlayer) {
+                continue;
+            }
+            if (hitCalculation(target, player)) {
+                return true;
+            }
+        }
+    }
     function bulletHitCalculation(bullet) {
         for (const player of gameState.players) {
             if (player == currentPlayer) {
@@ -239,8 +278,7 @@ wss.on('connection', function connection(ws) {
                 player.deaths += 1;
                 const shooter = gameState.players.find(p => p.id == bullet.shooterId);
                 shooter.kills += 1;
-                player.x = 0;
-                player.y = 0;
+                setSpawnPoint(player);
                 distributeState();
                 distributeScore();
                 return true;
