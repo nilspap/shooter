@@ -74,6 +74,7 @@
         const argg = new Audio("resources/argg.mp3");
         const scoreTable = document.getElementById("scoreTable");
         let playerId;
+        let level;
         function updateScore(score) {
             const tableRows = scoreTable.rows.length;
             for (let i = 1; i < tableRows; i++) {
@@ -197,12 +198,13 @@
             bulletDiv.style.left = `${bullet.x}px`;
             bulletDiv.style.top = `${bullet.y}px`;
 
-            // for (const brick of level.bricks) {
-            //     if (hitCalculation(bullet, brick)) {
-            //         flightEnded = true;
-            //         break;
-            //     }
-            // }
+            for (const brick of level.bricks) {
+                if (hitCalculation(bullet, brick)) {
+                    flightEnded = true;
+                    break;
+                }
+
+            }
 
             if (flightEnded == false) {
                 setTimeout(() => moveBullet(bulletDiv, bullet), bullet.frameDuration);
@@ -211,16 +213,24 @@
             }
         }
 
-        // function hitCalculation(obj1, obj2) {
-        //     console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
-        //     if (((obj1.x + obj1.width - playerSpeed) >= obj2.x)
-        //         && (obj1.x - obj1.width + playerSpeed) <= (obj2.x + obj2.width / 2)
-        //         && ((obj1.y + obj1.height - playerSpeed) >= obj2.y)
-        //         && (obj1.y - obj1.width + playerSpeed) <= obj2.y + obj2.width / 2) {
-        //         console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
-        //         return true;
-        //     }
-        // }
+        function getBounds(obj) {
+            return {
+                left: obj.x,
+                right: obj.x + obj.width,
+                top: obj.y,
+                bottom: obj.y + obj.height
+            };
+        }
+        function hitCalculation(obj1, obj2) {
+            const obj1Bounds = getBounds(obj1);
+            const obj2Bounds = getBounds(obj2);
+            const hit = !(obj1Bounds.top > obj2Bounds.bottom ||
+                obj1Bounds.right < obj2Bounds.left ||
+                obj1Bounds.bottom < obj2Bounds.top ||
+                obj1Bounds.left > obj2Bounds.right);
+            // console.log(`hit calculation result : ${hit} details: ${JSON.stringify(obj1Bounds)} and ${JSON.stringify(obj2Bounds)}`)
+            return hit;
+        }
         function createBullet(message) {
             const bullet = document.createElement("div");
             const shot = new Audio("resources/shot.mp3");
@@ -233,7 +243,7 @@
             document.body.append(bullet);
             moveBullet(bullet, message);
         }
-        function createLevel(level) {
+        function createLevel() {
             for (const brick of level.bricks) {
                 const brickDiv = document.createElement("div");
                 brickDiv.style.left = `${brick.x}px`;
@@ -264,7 +274,8 @@
                     updateScore(message.score);
                     break;
                 case "level":
-                    createLevel(message.level);
+                    level = message.level;
+                    createLevel();
                     break;
                 default:
                     break;

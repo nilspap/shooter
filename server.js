@@ -246,13 +246,18 @@ wss.on('connection', function connection(ws) {
                 return true;
             }
         }
+        for (const brick of level.bricks) {
+            if (hitCalculation(bullet, brick)) {
+                return true;
+            }
+
+        }
     }
     function shoot() {
         let startX = currentPlayer.x;
         let startY = currentPlayer.y;
         let bulletTargetX = startX;
         let bulletTargetY = startY;
-        let bulletTargetEndX = bulletTargetX;
         if (currentPlayer.aimDirection == "up") {
             startX += gunOffset;
             bulletTargetY -= flightDistance;
