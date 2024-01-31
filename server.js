@@ -207,15 +207,23 @@ wss.on('connection', function connection(ws) {
             setTimeout(() => moveBullet(bullet), bullet.frameDuration);
         }
     }
+    function getBounds(obj) {
+        return {
+            left: obj.x,
+            right: obj.x + obj.width,
+            top: obj.y,
+            bottom: obj.y + obj.height
+        };
+    }
     function hitCalculation(obj1, obj2) {
-        console.log(`hit calculation: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
-        if (((obj1.x + obj1.width - playerSpeed) >= obj2.x)
-            && (obj1.x - obj1.width + playerSpeed) <= (obj2.x + obj2.width / 2)
-            && ((obj1.y + obj1.height - playerSpeed) >= obj2.y)
-            && (obj1.y - obj1.width + playerSpeed) <= obj2.y + obj2.width / 2) {
-            console.log(`hit detected: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`)
-            return true;
-        }
+        const obj1Bounds = getBounds(obj1);
+        const obj2Bounds = getBounds(obj2);
+        const hit = !(obj1Bounds.top > obj2Bounds.bottom ||
+            obj1Bounds.right < obj2Bounds.left ||
+            obj1Bounds.bottom < obj2Bounds.top ||
+            obj1Bounds.left > obj2Bounds.right);
+        // console.log(`hit calculation result : ${hit} details: ${JSON.stringify(obj1Bounds)} and ${JSON.stringify(obj2Bounds)}`)
+        return hit;
     }
     function bulletHitCalculation(bullet) {
         for (const player of gameState.players) {
