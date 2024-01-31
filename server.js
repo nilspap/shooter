@@ -28,6 +28,12 @@ const level = {
         width: 300,
         height: 100,
         type: "wall"
+    }, {
+        x: 100,
+        y: 300,
+        width: 100,
+        height: 100,
+        type: "stone"
     }]
 };
 const playerSpawnPoints = [{

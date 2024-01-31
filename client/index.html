@@ -52,12 +52,23 @@
             background-image: url("resources/stein.png");
             background-repeat: no-repeat;
         }
+
+        #login {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+
+        }
     </style>
 </head>
 
 
 <body>
-
+    <div id="login">
+        <h1>please enter your username</h1>
+        <input id="userName" />
+        <button onclick="login()">login</button>
+    </div>
     <div id="score">
         <table id="scoreTable">
             <thead>
@@ -82,6 +93,10 @@
         const scoreTable = document.getElementById("scoreTable");
         let playerId;
         let level;
+        function login() {
+            const loginDiv = document.getElementById("login");
+            loginDiv.style.visibility = "hidden";
+        }
         function updateScore(score) {
             const tableRows = scoreTable.rows.length;
             for (let i = 1; i < tableRows; i++) {
