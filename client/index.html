@@ -39,11 +39,18 @@
             border: 1px solid black;
         }
 
-        .brick {
+        .levelObject {
             position: absolute;
+        }
+
+        .wall {
+            background-image: url("resources/brick.jpg");
+            background-size: 223px;
+        }
+
+        .stone {
             background-image: url("resources/stein.png");
             background-repeat: no-repeat;
-
         }
     </style>
 </head>
@@ -198,8 +205,8 @@
             bulletDiv.style.left = `${bullet.x}px`;
             bulletDiv.style.top = `${bullet.y}px`;
 
-            for (const brick of level.bricks) {
-                if (hitCalculation(bullet, brick)) {
+            for (const levelObject of level.levelObjects) {
+                if (hitCalculation(bullet, levelObject)) {
                     flightEnded = true;
                     break;
                 }
@@ -244,14 +251,15 @@
             moveBullet(bullet, message);
         }
         function createLevel() {
-            for (const brick of level.bricks) {
-                const brickDiv = document.createElement("div");
-                brickDiv.style.left = `${brick.x}px`;
-                brickDiv.style.top = `${brick.y}px`;
-                brickDiv.style.width = `${brick.width}px`;
-                brickDiv.style.height = `${brick.height}px`;
-                brickDiv.classList.add("brick");
-                document.body.append(brickDiv);
+            for (const levelObject of level.levelObjects) {
+                const levelObjectDiv = document.createElement("div");
+                levelObjectDiv.style.left = `${levelObject.x}px`;
+                levelObjectDiv.style.top = `${levelObject.y}px`;
+                levelObjectDiv.style.width = `${levelObject.width}px`;
+                levelObjectDiv.style.height = `${levelObject.height}px`;
+                levelObjectDiv.classList.add("levelObject");
+                levelObjectDiv.classList.add(levelObject.type);
+                document.body.append(levelObjectDiv);
             }
         }
         socket.addEventListener("message", (event) => {

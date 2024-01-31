@@ -16,16 +16,18 @@ const gameState = {
     players: []
 };
 const level = {
-    bricks: [{
+    levelObjects: [{
         x: 100,
         y: 100,
         width: 100,
-        height: 100
+        height: 100,
+        type: "stone"
     }, {
         x: 300,
         y: 100,
-        width: 100,
-        height: 100
+        width: 300,
+        height: 100,
+        type: "wall"
     }]
 };
 const playerSpawnPoints = [{
@@ -165,8 +167,8 @@ wss.on('connection', function connection(ws) {
             height: currentPlayer.height
         };
         let hitObstackle = false;
-        for (const brick of level.bricks) {
-            if (hitCalculation(newPlayerPosition, brick)) {
+        for (const levelObject of level.levelObjects) {
+            if (hitCalculation(newPlayerPosition, levelObject)) {
                 hitObstackle = true;
                 break;
             }
@@ -284,8 +286,8 @@ wss.on('connection', function connection(ws) {
                 return true;
             }
         }
-        for (const brick of level.bricks) {
-            if (hitCalculation(bullet, brick)) {
+        for (const levelObject of level.levelObjects) {
+            if (hitCalculation(bullet, levelObject)) {
                 return true;
             }
 
