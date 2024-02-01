@@ -354,6 +354,31 @@ wss.on('connection', function connection(ws) {
         let hitObstackle = false;
         for (const levelObject of level.levelObjects) {
             if (hitCalculation(newPlayerPosition, levelObject)) {
+                const levelObjectBounds = getBounds(levelObject);
+                switch (moveDirection) {
+                    case "down":
+                        currentPlayer.y = levelObjectBounds.top - currentPlayer.height;
+                        break;
+                    case "up":
+                        currentPlayer.y = levelObjectBounds.bottom;
+                        break;
+                    case "left":
+                        currentPlayer.x = levelObjectBounds.right;
+                        break;
+                    case "right":
+                        currentPlayer.x = levelObjectBounds.left - currentPlayer.width;
+                        break;
+                    case "down-right":
+                        break;
+                    case "down-left":
+                        break;
+                    case "up-right":
+                        break;
+                    case "up-left":
+                        break;
+                    default:
+                        break;
+                }
                 hitObstackle = true;
                 break;
             }
@@ -370,7 +395,7 @@ wss.on('connection', function connection(ws) {
     }
     function moveBullet(bullet) {
         let flightEnded = false;
-        console.log(`move bullet: ${JSON.stringify(bullet)}`);
+        //console.log(`move bullet: ${JSON.stringify(bullet)}`);
         if (bullet.flightDirection == "up") {
             bullet.y -= bullet.bulletSpeed;
             if (bullet.y <= bullet.bulletTargetY) {
@@ -432,13 +457,10 @@ wss.on('connection', function connection(ws) {
         };
     }
     function hitCalculation(obj1, obj2) {
-        const obj1Bounds = getBounds(obj1);
-        const obj2Bounds = getBounds(obj2);
-        const hit = !(obj1Bounds.top > obj2Bounds.bottom ||
-            obj1Bounds.right < obj2Bounds.left ||
-            obj1Bounds.bottom < obj2Bounds.top ||
-            obj1Bounds.left > obj2Bounds.right);
-        // console.log(`hit calculation result : ${hit} details: ${JSON.stringify(obj1Bounds)} and ${JSON.stringify(obj2Bounds)}`)
+        const hit = obj1.x < obj2.x + obj2.width &&
+            obj1.x + obj1.width > obj2.x &&
+            obj1.y < obj2.y + obj2.height &&
+            obj1.y + obj1.height > obj2.y;
         return hit;
     }
     function playerHitCalculation(target) {
