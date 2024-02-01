@@ -29,8 +29,14 @@ const level = {
         height: 37,
         type: "wall"
     }, {
-        x: 500,
-        y: 200,
+        x: 90,
+        y: 610,
+        width: 200,
+        height: 37,
+        type: "wall"
+    }, {
+        x: 650,
+        y: 250,
         width: 200,
         height: 37,
         type: "wall"
@@ -41,8 +47,26 @@ const level = {
         height: 50,
         type: "stone"
     }, {
+        x: 400,
+        y: 300,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
         x: 250,
         y: 300,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 400,
+        y: 450,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 400,
+        y: 600,
         width: 50,
         height: 50,
         type: "stone"
@@ -73,17 +97,35 @@ const level = {
     }]
 };
 const playerSpawnPoints = [{
-    x: 10,
-    y: 10
+    x: 30,
+    y: 30
 }, {
     x: 220,
     y: 125
 }, {
-    x: 20,
+    x: 30,
     y: 230
 }, {
     x: 650,
     y: 100
+}, {
+    x: 100,
+    y: 650
+}, {
+    x: 160,
+    y: 300
+}, {
+    x: 320,
+    y: 300
+}, {
+    x: 400,
+    y: 370
+}, {
+    x: 400,
+    y: 520
+}, {
+    x: 400,
+    y: 30
 }];
 
 
