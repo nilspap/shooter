@@ -29,11 +29,47 @@ const level = {
         height: 37,
         type: "wall"
     }, {
+        x: 500,
+        y: 200,
+        width: 200,
+        height: 37,
+        type: "wall"
+    }, {
         x: 100,
         y: 300,
         width: 50,
         height: 50,
         type: "stone"
+    }, {
+        x: 250,
+        y: 300,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 0,
+        y: 0,
+        width: 1000,
+        height: 20,
+        type: "brickets"
+    }, {
+        x: 0,
+        y: 20,
+        width: 20,
+        height: 710,
+        type: "brickets"
+    }, {
+        x: 20,
+        y: 710,
+        width: 980,
+        height: 20,
+        type: "brickets"
+    }, {
+        x: 980,
+        y: 20,
+        width: 20,
+        height: 690,
+        type: "brickets"
     }]
 };
 const playerSpawnPoints = [{
