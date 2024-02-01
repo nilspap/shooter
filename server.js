@@ -26,7 +26,7 @@ const level = {
         x: 300,
         y: 100,
         width: 300,
-        height: 100,
+        height: 37,
         type: "wall"
     }, {
         x: 100,
@@ -45,7 +45,11 @@ const playerSpawnPoints = [{
 }, {
     x: 20,
     y: 230
+}, {
+    x: 650,
+    y: 100
 }];
+
 
 const playerSpeed = 5;
 const bulletSpeed = 10;
