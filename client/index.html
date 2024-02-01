@@ -108,6 +108,7 @@
         const loginDiv = document.getElementById("login");
         const scoreTable = document.getElementById("scoreTable");
         const userNameDiv = document.getElementById("userName");
+        let pressedDirectionKeys = {};
         let userName;
         let playerId;
         let level;
@@ -160,7 +161,59 @@
                         break;
                 }
             });
-            return false;
+        }
+        document.onkeydown = function (ev) {
+            if (!gameActive) {
+                if (ev.key == "Enter") {
+                    connect();
+                }
+                return;
+            }
+            if (ev.key == "ArrowDown" || ev.key == "s") {
+                pressedDirectionKeys["down"] = true;
+            } else if (ev.key == "ArrowUp" || ev.key == "w") {
+                pressedDirectionKeys["up"] = true;
+            } else if (ev.key == "ArrowLeft" || ev.key == "a") {
+                pressedDirectionKeys["left"] = true;
+            } else if (ev.key == "ArrowRight" || ev.key == "d") {
+                pressedDirectionKeys["right"] = true;
+            }
+            if (pressedDirectionKeys["down"] && pressedDirectionKeys["right"]) {
+                sendMoveAction("down-right");
+            } else if (pressedDirectionKeys["down"] && pressedDirectionKeys["left"]) {
+                sendMoveAction("down-left");
+            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["right"]) {
+                sendMoveAction("up-right");
+            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["left"]) {
+                sendMoveAction("up-left");
+            } else if (pressedDirectionKeys["up"]) {
+                sendMoveAction("up");
+            } else if (pressedDirectionKeys["down"]) {
+                sendMoveAction("down");
+            } else if (pressedDirectionKeys["left"]) {
+                sendMoveAction("left");
+            } else if (pressedDirectionKeys["right"]) {
+                sendMoveAction("right");
+            }
+            if (ev.code == "Space") {
+                sendAction({
+                    action: "shoot"
+                });
+            }
+        }
+        document.onkeyup = function (ev) {
+            if (ev.key == "ArrowDown" || ev.key == "s") {
+                pressedDirectionKeys["down"] = false;
+            }
+            if (ev.key == "ArrowUp" || ev.key == "w") {
+                pressedDirectionKeys["up"] = false;
+            }
+            if (ev.key == "ArrowLeft" || ev.key == "a") {
+                pressedDirectionKeys["left"] = false;
+            }
+            if (ev.key == "ArrowRight" || ev.key == "d") {
+                pressedDirectionKeys["right"] = false;
+            }
         }
         function showGame() {
             loginDiv.style.visibility = "hidden";
@@ -361,57 +414,6 @@
         function sendAction(action) {
             socket.send(JSON.stringify(action));
 
-        }
-        let pressedDirectionKeys = {};
-        document.onkeydown = function (ev) {
-            if (!gameActive) {
-                return;
-            }
-            if (ev.key == "ArrowDown" || ev.key == "s") {
-                pressedDirectionKeys["down"] = true;
-            } else if (ev.key == "ArrowUp" || ev.key == "w") {
-                pressedDirectionKeys["up"] = true;
-            } else if (ev.key == "ArrowLeft" || ev.key == "a") {
-                pressedDirectionKeys["left"] = true;
-            } else if (ev.key == "ArrowRight" || ev.key == "d") {
-                pressedDirectionKeys["right"] = true;
-            }
-            if (pressedDirectionKeys["down"] && pressedDirectionKeys["right"]) {
-                sendMoveAction("down-right");
-            } else if (pressedDirectionKeys["down"] && pressedDirectionKeys["left"]) {
-                sendMoveAction("down-left");
-            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["right"]) {
-                sendMoveAction("up-right");
-            } else if (pressedDirectionKeys["up"] && pressedDirectionKeys["left"]) {
-                sendMoveAction("up-left");
-            } else if (pressedDirectionKeys["up"]) {
-                sendMoveAction("up");
-            } else if (pressedDirectionKeys["down"]) {
-                sendMoveAction("down");
-            } else if (pressedDirectionKeys["left"]) {
-                sendMoveAction("left");
-            } else if (pressedDirectionKeys["right"]) {
-                sendMoveAction("right");
-            }
-            if (ev.code == "Space") {
-                sendAction({
-                    action: "shoot"
-                });
-            }
-        }
-        document.onkeyup = function (ev) {
-            if (ev.key == "ArrowDown" || ev.key == "s") {
-                pressedDirectionKeys["down"] = false;
-            }
-            if (ev.key == "ArrowUp" || ev.key == "w") {
-                pressedDirectionKeys["up"] = false;
-            }
-            if (ev.key == "ArrowLeft" || ev.key == "a") {
-                pressedDirectionKeys["left"] = false;
-            }
-            if (ev.key == "ArrowRight" || ev.key == "d") {
-                pressedDirectionKeys["right"] = false;
-            }
         }
     </script>
 </body>
