@@ -19,8 +19,8 @@ const level = {
     levelObjects: [{
         x: 100,
         y: 100,
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         type: "stone"
     }, {
         x: 300,
@@ -31,8 +31,8 @@ const level = {
     }, {
         x: 100,
         y: 300,
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         type: "stone"
     }]
 };
@@ -102,6 +102,7 @@ wss.on('connection', function connection(ws) {
     }
     const currentPlayer = {
         id: playerId,
+        userName: "",
         width: playerSize,
         height: playerSize,
         aimDirection: "right",
@@ -112,13 +113,39 @@ wss.on('connection', function connection(ws) {
     playerCounter += 1;
     gameState.players.push(currentPlayer);
     distributeState();
-    distributeScore();
+
+    ws.on('message', function message(data) {
+        // console.log('received: %s', data);
+        const command = JSON.parse(data);
+        if (command.action == "move") {
+            movePlayer(command.moveDirection);
+        }
+        if (command.action == "shoot") {
+            shoot();
+        }
+        if (command.action == "userName") {
+            currentPlayer.userName = command.userName;
+            distributeScore();
+        }
+        // console.log(JSON.stringify(gameState));
+    });
+
+    ws.on('close', function close() {
+        const index = gameState.players.indexOf(currentPlayer);
+        if (index > -1) {
+            gameState.players.splice(index, 1);
+        }
+        distributeState();
+        distributeScore();
+    });
 
     ws.on('error', console.error);
+
     function distributeScore() {
         const score = gameState.players.map(player => {
             return {
                 id: player.id,
+                name: player.userName,
                 kills: player.kills,
                 deaths: player.deaths,
                 score: player.kills - player.deaths
@@ -354,23 +381,5 @@ wss.on('connection', function connection(ws) {
         moveBullet(message);
         distributeMessage(message);
     }
-    ws.on('message', function message(data) {
-        // console.log('received: %s', data);
-        const command = JSON.parse(data);
-        if (command.action == "move") {
-            movePlayer(command.moveDirection);
-        }
-        if (command.action == "shoot") {
-            shoot();
-        }
-        // console.log(JSON.stringify(gameState));
-    });
-    ws.on('close', function close() {
-        const index = gameState.players.indexOf(currentPlayer);
-        if (index > -1) {
-            gameState.players.splice(index, 1);
-        }
-        distributeState();
-        distributeScore();
-    });
+
 });
