@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "shooter",
   "scripts": {
-    "start": "nodemon -e js,html ./server.js",
-    "nils": "node server.js",
-    "halloWelt": "echo hallo Welt"
+    "start": "node ./server.js",
+    "watch": "nodemon -e js,html ./server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
