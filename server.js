@@ -35,6 +35,12 @@ const level = {
         height: 37,
         type: "wall"
     }, {
+        x: 750,
+        y: 610,
+        width: 200,
+        height: 37,
+        type: "wall"
+    }, {
         x: 650,
         y: 250,
         width: 200,
@@ -71,29 +77,59 @@ const level = {
         height: 50,
         type: "stone"
     }, {
+        x: 700,
+        y: 450,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 780,
+        y: 450,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 640,
+        y: 510,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 840,
+        y: 510,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
+        x: 860,
+        y: 80,
+        width: 50,
+        height: 50,
+        type: "stone"
+    }, {
         x: 0,
         y: 0,
         width: 1000,
         height: 20,
-        type: "brickets"
+        type: "bricks"
     }, {
         x: 0,
         y: 20,
         width: 20,
         height: 710,
-        type: "brickets"
+        type: "bricks"
     }, {
         x: 20,
         y: 710,
         width: 980,
         height: 20,
-        type: "brickets"
+        type: "bricks"
     }, {
         x: 980,
         y: 20,
         width: 20,
         height: 690,
-        type: "brickets"
+        type: "bricks"
     }]
 };
 const playerSpawnPoints = [{
@@ -126,6 +162,42 @@ const playerSpawnPoints = [{
 }, {
     x: 400,
     y: 30
+}, {
+    x: 400,
+    y: 150
+}, {
+    x: 605,
+    y: 100
+}, {
+    x: 860,
+    y: 250
+}, {
+    x: 595,
+    y: 250
+}, {
+    x: 725,
+    y: 290
+}, {
+    x: 740,
+    y: 505
+}, {
+    x: 320,
+    y: 600
+}, {
+    x: 585,
+    y: 515
+}, , {
+    x: 925,
+    y: 650
+}, {
+    x: 895,
+    y: 510
+}, {
+    x: 920,
+    y: 80
+}, {
+    x: 805,
+    y: 35
 }];
 
 
