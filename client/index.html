@@ -98,13 +98,6 @@
             background-image: url("resources/map.jpg");
             background-size: 30px;
         }
-
-        #login {
-            width: 100%;
-            height: 100%;
-            background-color: white;
-
-        }
     </style>
 </head>
 
@@ -134,29 +127,28 @@
 
     <script>
         // Create WebSocket connection.
-        var wsUrl = new URL('', window.location.href);
-
-        wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
-        wsUrl.port = 9206;
-        let socket;
-        let gameActive = false;
-
+        const protocol = document.location.protocol == "http:" ? "ws://" : "wss://";
         const game = document.getElementById("game");
         const loginDiv = document.getElementById("login");
         const scoreTable = document.getElementById("scoreTable");
         const userNameDiv = document.getElementById("userName");
-        userNameDiv.focus();
+
+        let socket;
         let pressedDirectionKeys = {};
+        let gameActive = false;
         let userName;
         let playerId;
         let level;
+
+        userNameDiv.focus();
+
         function connect() {
             userName = userNameDiv.value;
             if (!userName) {
                 alert("Please enter a username");
                 return;
             }
-            socket = new WebSocket(wsUrl.href);
+            socket = new WebSocket(protocol + document.location.host);
             socket.addEventListener("open", (event) => {
                 showGame();
                 sendAction({

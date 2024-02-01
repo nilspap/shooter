@@ -1,15 +1,13 @@
 const express = require('express');
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({
-    port: 9206
-});
+const port = process.env.PORT || 8080;
 const http = require('http');
-const { spawn } = require('child_process');
 const app = express();
 app.use(express.static('client'));
 const server = http.createServer(app);
-server.listen(8080, function () {
-    console.log('Listening on http://localhost:8080');
+const wss = new WebSocket.Server({ server });
+server.listen(port, function () {
+    console.log('Listening on http://localhost:' + port);
 });
 const gameState = {
     type: "gameState",
