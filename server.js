@@ -55,6 +55,9 @@ wss.on('connection', function connection(ws) {
         do {
             const randomNumber = Math.floor(Math.random() * (level.playerSpawnPoints.length));
             let spawnPoint = level.playerSpawnPoints[randomNumber];
+            if (!spawnPoint) {
+                continue;
+            }
             spawnPoint.height = playerSize;
             spawnPoint.width = playerSize;
             if (playerHitCalculation(spawnPoint)) {
@@ -78,7 +81,7 @@ wss.on('connection', function connection(ws) {
     setSpawnPoint(currentPlayer);
     playerCounter += 1;
     gameState.players.push(currentPlayer);
-    distributeState();
+
 
     ws.on('message', function message(data) {
         // console.log('received: %s', data);
@@ -92,6 +95,7 @@ wss.on('connection', function connection(ws) {
         if (command.action == "userName") {
             currentPlayer.userName = command.userName;
             distributeScore();
+            distributeState();
         }
         // console.log(JSON.stringify(gameState));
     });

@@ -60,6 +60,16 @@
             background-color: #ffff004d;
         }
 
+        .playerName {
+            font-family: sans-serif;
+            font-size: small;
+            background-color: black;
+            color: orange;
+            position: absolute;
+            right: -10;
+            bottom: -10;
+        }
+
         .bullet {
             position: absolute;
             background-color: black;
@@ -276,6 +286,7 @@
                 if (!playerDiv) {
                     playerDiv = document.createElement("div");
                     playerDiv.id = player.id;
+
                     playerDiv.style.width = `${player.width}px`;
                     playerDiv.style.height = `${player.height}px`;
                     playerDiv.style.backgroundSize = `${player.width}px ${player.height}px`;
@@ -284,6 +295,10 @@
                         playerDiv.classList.add("currentPlayer");
                         playerDiv.style.borderRadius = `${player.height / 2}px`;
                     }
+                    const playerNameDiv = document.createElement("div");
+                    playerNameDiv.innerText = player.userName;
+                    playerNameDiv.classList.add("playerName");
+                    playerDiv.append(playerNameDiv);
                     game.append(playerDiv);
                 } else {
                     const index = currentPlayerDivs.indexOf(playerDiv);
