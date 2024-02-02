@@ -108,6 +108,16 @@
             background-image: url("resources/map.jpg");
             background-size: 30px;
         }
+
+        .newStone {
+            background-image: url("resources/newstone.jpg");
+            background-size: 100px;
+        }
+
+        .house {
+            background-image: url("resources/haus.png");
+            background-size: 100%;
+        }
     </style>
 </head>
 
@@ -295,10 +305,10 @@
                         playerDiv.classList.add("currentPlayer");
                         playerDiv.style.borderRadius = `${player.height / 2}px`;
                     }
-                    const playerNameDiv = document.createElement("div");
-                    playerNameDiv.innerText = player.userName;
-                    playerNameDiv.classList.add("playerName");
-                    playerDiv.append(playerNameDiv);
+                    //const playerNameDiv = document.createElement("div");
+                    // playerNameDiv.innerText = player.userName;
+                    // playerNameDiv.classList.add("playerName");
+                    // playerDiv.append(playerNameDiv);
                     game.append(playerDiv);
                 } else {
                     const index = currentPlayerDivs.indexOf(playerDiv);
@@ -440,6 +450,8 @@
             moveBullet(bullet, message);
         }
         function createLevel() {
+            //game.style.width = `${level.levelSize.width}px`;
+            game.style.height = `${level.levelSize.height}px`;
             for (const levelObject of level.levelObjects) {
                 const levelObjectDiv = document.createElement("div");
                 levelObjectDiv.style.left = `${levelObject.x}px`;

@@ -5,6 +5,18 @@ const level = {
         width: 50,
         height: 50,
         type: "stone"
+    }, {
+        x: 500,
+        y: 300,
+        width: 200,
+        height: 100,
+        type: "newStone"
+    }, {
+        x: 100,
+        y: 400,
+        width: 200,
+        height: 200,
+        type: "house"
     }],
     playerSpawnPoints: [{
         x: 30,
