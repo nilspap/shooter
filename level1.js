@@ -1,6 +1,7 @@
 const level = {
+    levelBackground: "levelBackgroundSteel",
     levelSize: {
-        //width: 1500,
+        width: 1500,
         height: 730,
     },
     levelObjects: [{

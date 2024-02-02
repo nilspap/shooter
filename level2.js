@@ -1,4 +1,9 @@
 const level = {
+    levelBackground: "levelBackgroundGrass",
+    levelSize: {
+        width: 1500,
+        height: 730,
+    },
     levelObjects: [{
         x: 100,
         y: 100,

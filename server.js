@@ -15,7 +15,7 @@ const gameState = {
 };
 
 const level = require('./level1').level;
-// const level = require('./level2').level;
+//const level = require('./level2').level;
 
 const playerSpeed = 5;
 const bulletSpeed = 10;
